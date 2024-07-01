@@ -21,7 +21,6 @@ usage of the script:
 
 ```txt
 REPO
-├── .git
 ├── 2023
 │   ├── April
 │   ├── August
