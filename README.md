@@ -7,6 +7,16 @@
 [License Icon]: https://img.shields.io/badge/license-MIT-blue.svg
 [LICENSE]: LICENSE
 
+<!-- markdownlint-disable MD033 -->
+<p>
+  <img
+    height="50px"
+    src="https://codeberg.org/1Kill2Steal/skill-icons/raw/branch/main/icons/Python-Dark.svg"
+    alt="Python"
+  />
+</p>
+<!-- markdownlint-enable MD033 -->
+
 <!-- markdownlint-disable MD028 -->
 
 > [!IMPORTANT]
