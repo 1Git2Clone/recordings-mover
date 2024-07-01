@@ -7,10 +7,23 @@
 [License Icon]: https://img.shields.io/badge/license-MIT-blue.svg
 [LICENSE]: LICENSE
 
+<!-- markdownlint-disable MD028 -->
+
 > [!IMPORTANT]
 > This script was mainly done for OBS-styled recordings but it can be used on
 > any type of recordings which have files saved in the following format:
 > `YYYY-MM`.
+
+> [!NOTE]
+> The `YYYY-MM` part can be **anywhere** in the file name, it doesn't
+> particularly restrain the file from not having anything before and/or after
+> the year and month. Think of it as running:
+
+```sh
+mv origin_dir/*YYYY-MM* repo_dir/year/month/
+```
+
+<!-- markdownlint-enable MD028 -->
 
 It gets the specified year (default: current year) and makes a directory with
 it in this directory and makes directories for all months in it (or for a
@@ -74,7 +87,7 @@ year and month as optional flags.
 py move_recordings.py
 ```
 
-Optional but you can specify a specific year and/or month as numbers for it as well:
+Optional: you can specify a specific year and/or month as numbers for it as well:
 
 ```sh
 py move_recordings.py -y=2023 -m=1 # January
