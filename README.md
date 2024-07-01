@@ -1,5 +1,12 @@
 # Recordings mover
 
+[![GH_Build Icon]][GH_Build Status]&emsp;[![License Icon]][LICENSE]
+
+[GH_Build Icon]: https://img.shields.io/github/actions/workflow/status/1git2clone/recordings-mover/pylint.yml?branch=main
+[GH_Build Status]: https://github.com/1git2clone/recordings-mover/actions?query=branch%3Amaster
+[License Icon]: https://img.shields.io/badge/license-MIT-blue.svg
+[LICENSE]: LICENSE
+
 > [!IMPORTANT]
 > This script was mainly done for OBS-styled recordings but it can be used on
 > any type of recordings which have files saved in the following format:
