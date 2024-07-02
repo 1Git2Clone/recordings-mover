@@ -86,9 +86,9 @@ def main(year: int, month: int | None):
             year=year,
             year_dir=year_dir,
             # I hate off by one errors.
-            current_month=MONTHS[month + 1],
+            current_month=MONTHS[month - 1],
         )
-        print(f"All videos from {MONTHS[month + 1]} are moved over!")
+        print(f"All videos from {MONTHS[month - 1]} are moved over!")
     else:
         for month_idx, current_month in enumerate(MONTHS):
             month_dir = os.path.join(year_dir, current_month)
