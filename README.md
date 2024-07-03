@@ -107,4 +107,4 @@ The defaults are:
 
 - Year: current year
 
-- Month: All months from the current year
+- Month: All months
