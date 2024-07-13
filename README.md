@@ -94,14 +94,27 @@ year and month as optional flags.
 ## Usage
 
 ```sh
-py move_recordings.py
+RECORDINGS_ORIGIN_DIR="/your/recordings/source/path" python3 move_recordings.py
 ```
 
 Optional: you can specify a specific year and/or month as numbers for it as well:
 
 ```sh
-py move_recordings.py -y=2023 -m=1 # January
+RECORDINGS_ORIGIN_DIR="/your/recordings/source/path" python3 move_recordings.py -y=2023 -m=1 # January
 ```
+
+^ The Recordings paths work with Windows directories as well. Here's a PowerShell example:
+
+```powershell
+$env:RECORDINGS_ORIGIN_DIR="D:\Your\Recordings\Source\Path"
+python3 move_recordings.py
+```
+
+> [!NOTE]
+> If you're tired of setting that environment variable each time you can either
+> use it in your `.profile` file or change the hard-coded alternative in the
+> source code (At the top of the [move_recordings.py](./move_recordings.py)
+> file).
 
 The defaults are:
 
