@@ -87,10 +87,12 @@ RECORDINGS_ORIGIN_DIR="/your/recordings/source/path" python3 move_recordings.py
 Optional: you can specify a specific year and/or month as numbers for it as well:
 
 ```sh
-RECORDINGS_ORIGIN_DIR="/your/recordings/source/path" python3 move_recordings.py -y=2023 -m=1 # January
+RECORDINGS_ORIGIN_DIR="/your/recordings/source/path" \
+python3 move_recordings.py -y=2023 -m=1 # January
 ```
 
-^ The Recordings paths work with Windows directories as well. Here's a PowerShell example:
+^ The Recordings paths work with Windows directories as well. Here's a
+PowerShell example:
 
 ```powershell
 $env:RECORDINGS_ORIGIN_DIR="D:\Your\Recordings\Source\Path"
