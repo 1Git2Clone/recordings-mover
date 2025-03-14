@@ -55,7 +55,7 @@ def move_recordings(month_pos: int, year: int, year_dir: str, current_month: str
     # Example: '2024-07' (OBS saves recordings in that format)
     target_month_str = str(year) + "-" + str_month_pos
     print(f"TARGET sequence: {target_month_str}")
-    # SCRIPT_DIR/2024/July
+    # SCRIPT_DIR/2024/07-July
     month_dir = os.path.join(year_dir, current_month)
 
     for recording_filename in os.listdir(RECORDINGS_ORIGIN_DIR):
@@ -75,11 +75,11 @@ def main(year: int, month: int | None):
     print("Starting...")
     start = time.perf_counter()
 
-    year_dir = os.path.join(SCRIPT_DIR, str(year))
+    year_dir = os.path.join(RECORDINGS_ORIGIN_DIR, str(year))
     os.makedirs(year_dir, exist_ok=True)
 
     if month is not None and month in range(1, 13):
-        month_dir = os.path.join(year_dir, MONTHS[month - 1])
+        month_dir = os.path.join(year_dir, f"{month:02}-{MONTHS[month - 1]}")
         make_month_dir(month_dir=month_dir)
         move_recordings(
             month_pos=month,
@@ -90,8 +90,8 @@ def main(year: int, month: int | None):
         )
         print(f"All videos from {MONTHS[month - 1]} are moved over!")
     else:
-        for month_idx, current_month in enumerate(MONTHS):
-            month_dir = os.path.join(year_dir, current_month)
+        for month_idx, current_month in enumerate(MONTHS, 1):
+            month_dir = os.path.join(year_dir, f"{month_idx:02}-{current_month}")
 
             make_month_dir(month_dir=month_dir)
 

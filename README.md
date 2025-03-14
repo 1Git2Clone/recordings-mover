@@ -44,32 +44,19 @@ usage of the script:
 
 ```txt
 REPO
-├── 2023
-│   ├── April
-│   ├── August
-│   ├── December
-│   ├── February
-│   ├── January
-│   ├── July
-│   ├── June
-│   ├── March
-│   ├── May
-│   ├── November
-│   ├── October
-│   └── September
-├── 2024
-│   ├── April
-│   ├── August
-│   ├── December
-│   ├── February
-│   ├── January
-│   ├── July
-│   ├── June
-│   ├── March
-│   ├── May
-│   ├── November
-│   ├── October
-│   └── September
+├── 2025
+│   ├── 01-January
+│   ├── 02-February
+│   ├── 03-March
+│   ├── 04-April
+│   ├── 05-May
+│   ├── 06-June
+│   ├── 07-July
+│   ├── 08-August
+│   ├── 09-September
+│   ├── 10-October
+│   ├── 11-November
+│   └── 12-December
 ├── .gitignore
 ├── README.md
 └── move_recordings.py
