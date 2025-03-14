@@ -8,19 +8,19 @@ import time
 
 from datetime import datetime
 
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 
-# This one is hardcoded yea. At least you can change is relatively easily.
-# Still better than manually typing it out all the time...
-RECORDINGS_ORIGIN_DIR: str = os.getenv(
-    "RECORDINGS_ORIGIN_DIR", "/home/hutao/Videos/Recordings/"
+from pathlib import Path
+
+TEXT_WIDTH: int = 80
+TEXT_FILL: str = "*"
+
+RECORDINGS_ORIGIN_DIR: Path = Path(
+    os.environ.get("RECORDINGS_ORIGIN_DIR") or Path.cwd()
 )
 
-# Also serves as the target directories pivot. It's SCRIPT_DIR followed by the
-# corresponding month.
-SCRIPT_DIR: str = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_DIR: Path = Path(__file__).absolute().parent
 
-# If no month argument is specified - do all of them.
 MONTHS: list[str] = [
     "January",
     "February",
@@ -37,61 +37,74 @@ MONTHS: list[str] = [
 ]
 
 
-def make_month_dir(month_dir: str):
-    print(f"Making: {month_dir}")
+def make_month_dir(month_dir: Path) -> None:
+    print(
+        " MAKING ".center(TEXT_WIDTH, TEXT_FILL),
+        f"{month_dir}",
+        sep="\n",
+    )
+    print(TEXT_FILL * TEXT_WIDTH)
     try:
-        os.makedirs(month_dir)
-        print("DONE!")
+        month_dir.mkdir(parents=True)
+        print("DONE".center(TEXT_WIDTH))
     except FileExistsError:
-        print(f"Dicrectory: '{month_dir}' already exists. Skipping...")
+        print(
+            "Dicrectory:",
+            f"  -  `{month_dir}`",
+            "already exists. Skipping...",
+            sep="\n",
+        )
+    print(TEXT_FILL * TEXT_WIDTH)
 
 
-def move_recordings(month_pos: int, year: int, year_dir: str, current_month: str):
-    str_month_pos: str
-    if month_pos < 10:
-        str_month_pos = "0" + str(month_pos)
-    else:
-        str_month_pos = str(month_pos)
-    # Example: '2024-07' (OBS saves recordings in that format)
-    target_month_str = str(year) + "-" + str_month_pos
-    print(f"TARGET sequence: {target_month_str}")
-    # SCRIPT_DIR/2024/07-July
-    month_dir = os.path.join(year_dir, current_month)
+def move_recordings(
+    month_pos: int, year: int, year_dir: Path, current_month: str
+) -> None:
+    month_formatted_idx: str = f"{(month_pos - 1):02}"
+    target_month_str: str = str(year) + "-" + month_formatted_idx
+    print(f"Current month: {month_formatted_idx}-{current_month}")
+    month_dir: Path = Path(year_dir) / current_month
 
-    for recording_filename in os.listdir(RECORDINGS_ORIGIN_DIR):
-        if target_month_str not in recording_filename:
+    for recording_filename in RECORDINGS_ORIGIN_DIR.iterdir():
+        if target_month_str not in str(recording_filename):
             continue
 
-        full_recording_path = os.path.join(RECORDINGS_ORIGIN_DIR, recording_filename)
-        target_path = os.path.join(month_dir, recording_filename)
-        print(f"Moving {full_recording_path} to {target_path}")
+        full_recording_path: Path = Path(RECORDINGS_ORIGIN_DIR) / recording_filename
+        target_path: Path = Path(month_dir) / recording_filename
+        print(
+            "MOVING".center(TEXT_WIDTH, "-"),
+            f"{full_recording_path}",
+            "to",
+            f"{target_path}",
+            sep="\n",
+        )
         shutil.move(full_recording_path, target_path)
 
 
-def main(year: int, month: int | None):
+def main(year: int, month: int | None) -> None:
     if year > datetime.now().year:
-        return
+        return None
 
     print("Starting...")
-    start = time.perf_counter()
+    start: float = time.perf_counter()
 
-    year_dir = os.path.join(RECORDINGS_ORIGIN_DIR, str(year))
+    year_dir: Path = RECORDINGS_ORIGIN_DIR / str(year)
     os.makedirs(year_dir, exist_ok=True)
 
     if month is not None and month in range(1, 13):
-        month_dir = os.path.join(year_dir, f"{month:02}-{MONTHS[month - 1]}")
+        month_idx = month - 1
+        month_dir = Path(year_dir) / f"{month:02}-{MONTHS[month_idx]}"
         make_month_dir(month_dir=month_dir)
         move_recordings(
             month_pos=month,
             year=year,
             year_dir=year_dir,
-            # I hate off by one errors.
-            current_month=MONTHS[month - 1],
+            current_month=MONTHS[month_idx],
         )
-        print(f"All videos from {MONTHS[month - 1]} are moved over!")
+        print(f"All videos from {MONTHS[month_idx]} {year} are moved over!")
     else:
         for month_idx, current_month in enumerate(MONTHS, 1):
-            month_dir = os.path.join(year_dir, f"{month_idx:02}-{current_month}")
+            month_dir = Path(year_dir) / f"{month_idx:02}-{current_month}"
 
             make_month_dir(month_dir=month_dir)
 
@@ -101,19 +114,17 @@ def main(year: int, month: int | None):
                 year_dir=year_dir,
                 current_month=current_month,
             )
-            print(f"All videos from {current_month} are moved over!")
-        print("All videos from all months are moved over!")
+            print(f"All videos from {current_month} {year} are moved over!")
+        print(f"All videos from all months of {year} are moved over!")
 
-    elapsed = time.perf_counter() - start
+    elapsed: float = time.perf_counter() - start
     print(f"Finished in: {elapsed:.2f} seconds")
 
     print("Exiting!...")
 
-    return
-
 
 if __name__ == "__main__":
-    if not os.path.exists(RECORDINGS_ORIGIN_DIR):
+    if not RECORDINGS_ORIGIN_DIR.exists:
         print(
             f"The recordings directory: '{RECORDINGS_ORIGIN_DIR}' DOESN'T"
             + "exist. Make sure to hardcode it properly or use a correct"
@@ -121,7 +132,7 @@ if __name__ == "__main__":
         )
         sys.exit(1)
 
-    parser = ArgumentParser(
+    parser: ArgumentParser = ArgumentParser(
         prog="move_recordings.py",
         description="Moves the OBS recordings from a specific month over from"
         + " one hardcoded directory to the script directory.",
@@ -143,7 +154,7 @@ if __name__ == "__main__":
         help=("Enter the month as a number directly. Does every month by default!"),
     )
 
-    args = parser.parse_args()
+    args: Namespace = parser.parse_args()
 
     try:
         main(year=args.year, month=args.month)
